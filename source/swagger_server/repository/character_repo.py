@@ -26,7 +26,14 @@ class CharacterRepo:
     def get_character_list():
         try:
             character_list = Character.query.all()
-            return [character.to_dict() for character in character_list]
+            return [
+                {
+                    key: value
+                    for key, value in character.to_dict().items()
+                    if key != "hair_color"
+                }
+                for character in character_list
+            ]
         except Exception:
             return None
 
