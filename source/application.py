@@ -1,19 +1,28 @@
 import connexion
 from swagger_server import encoder
-from swagger_server.repository.base_repo import db, BaseRepo
+
+# from swagger_server.repository.base_repo import BaseRepo
+
+# from utilities.helpers import return_status
+from utilities.helpers import *
+from swagger_server.repository.base_repo import db
 from utilities.settings import Settings
+from utilities.helpers import return_status
 
 
 def main():
     app = connexion.App(
         __name__,
-        specification_dir="./swagger/",
+        specification_dir="swagger_server/swagger/",
         options={"swagger_ui": False},
     )
     app.app.json_provider_class = encoder.JSONEncoder
     app.app.url_map.strict_slashes = False
     app.add_api("swagger.yaml", base_path="/character", strict_validation=True)
 
+    # # BaseRepo.create_connection()
+    # app.route("/")(return_status)
+    # return app
     Settings.init()
 
     # Configurar la base de datos
@@ -23,22 +32,13 @@ def main():
     db.init_app(app.app)
 
     with app.app.app_context():
-        db.create_all()  # Crea la base de datos y las tablas si no existen
+        db.create_all()  # Crear la base de datos y las tablas
 
-        # Verifica la conexión a la base de datos
-        if not BaseRepo.create_connection():
-            print("La conexión a la base de datos ha fallado.")
-            return None
-
+    app.route("/")(return_status)
     return app
 
 
-# *********** EJECUCIÓN
+# *********** EXECUTION
 if __name__ == "__main__":
     create_app = main()
-    if create_app:
-        create_app.run(port=8080)
-    else:
-        print(
-            "La aplicación no puede iniciar debido a un fallo en la conexión con la base de datos."
-        )
+    create_app.run(80)

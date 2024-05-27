@@ -1,0 +1,12 @@
+utilities/config.ini
+testing/*
+swagger_server/test/*
+README.md
+tox.ini
+git_push.sh
+test-requirements.txt
+setup.py
+
+__pycache__/
+
+venv

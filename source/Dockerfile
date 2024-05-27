@@ -1,16 +1,18 @@
-FROM python:3.9-slim-buster
+# Use an official Python runtime as a parent image
+FROM python:3.9-slim-buster AS base
+FROM base as builder
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+# Set the working directory to /app
+WORKDIR /app
 
-COPY requirements.txt /usr/src/app/
+# Copy the current directory contents into the container at /app
+ADD . /app
 
-RUN pip3 install --no-cache-dir -r requirements.txt
+# Install any needed packages specified in requirements.txt
+RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
-COPY . /usr/src/app
+# Make port 80 available to the world outside this container
+EXPOSE 80
 
-EXPOSE 8080
-
-ENTRYPOINT ["python3"]
-
-CMD ["-m", "swagger_server"]
+# Run app.py when the container launches
+CMD ["gunicorn", "--bind", "0.0.0.0:80", "application:main()", "--workers", "1", "--threads", "1",  "--access-logfile", "-", "--timeout", "0"]
