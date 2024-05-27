@@ -7,6 +7,7 @@ from swagger_server import encoder
 from utilities.helpers import *
 from swagger_server.repository.base_repo import db
 from utilities.settings import Settings
+from utilities.helpers import return_status
 
 
 def main():
@@ -33,10 +34,11 @@ def main():
     with app.app.app_context():
         db.create_all()  # Crear la base de datos y las tablas
 
+    app.route("/")(return_status)
     return app
 
 
 # *********** EXECUTION
 if __name__ == "__main__":
     create_app = main()
-    create_app.run(8080)
+    create_app.run(80)
