@@ -1,0 +1,6 @@
+connexion==2.14.2
+connexion[swagger-ui] >= 2.6.0==None
+python-dateutil==2.8.2
+SQLAlchemy==2.0.30
+Flask==2.2.5
+Flask-SQLAlchemy==3.1.1
