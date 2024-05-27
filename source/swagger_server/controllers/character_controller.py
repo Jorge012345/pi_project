@@ -12,7 +12,9 @@ def get_character_list():  # noqa: E501
     :rtype: CharacterList
     """
     character_list = CharacterRepo().get_character_list()
-    return character_list
+    if character_list is None:
+        return Error500()
+    return character_list, 200
 
 
 def get_character_by_id(id):  # noqa: E501
@@ -29,7 +31,7 @@ def get_character_by_id(id):  # noqa: E501
 
     if character is None:
         return Error404(message="Character not found")
-    return character.to_dict()
+    return character.to_dict(), 200
 
 
 def add_character(body):  # noqa: E501
